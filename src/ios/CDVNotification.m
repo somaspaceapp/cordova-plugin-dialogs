@@ -41,14 +41,14 @@ static NSMutableArray *openAlertList = nil;
 - (void)showDialogWithMessage:(NSString*)message title:(NSString*)title buttons:(NSArray*)buttons defaultText:(NSString*)defaultText callbackId:(NSString*)callbackId dialogType:(NSString*)dialogType styles:(NSArray*)styles
 {
     int count = (int)[buttons count];
-
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
 
     __weak CDVNotification* weakNotif = self;
 
     for (int n = 0; n < count; n++) {
+        
         [alertController addAction:[UIAlertAction actionWithTitle:[buttons objectAtIndex:n]
-                                                            style:[styles objectAtIndex:n] // was UIAlertActionStyleDefault
+                                                            style:[[styles objectAtIndex:n] integerValue] // was UIAlertActionStyleDefault
                                                           handler:^(UIAlertAction * action)
         {
             CDVPluginResult* result;
@@ -94,7 +94,7 @@ static NSMutableArray *openAlertList = nil;
     NSString* title = [command argumentAtIndex:1];
     NSString* buttons = [command argumentAtIndex:2];
 
-    [self showDialogWithMessage:message title:title buttons:@[buttons] defaultText:nil callbackId:callbackId dialogType:DIALOG_TYPE_ALERT styles:@[0]];
+    [self showDialogWithMessage:message title:title buttons:@[buttons] defaultText:nil callbackId:callbackId dialogType:DIALOG_TYPE_ALERT styles:@[@0]];
 }
 
 - (void)confirm:(CDVInvokedUrlCommand*)command

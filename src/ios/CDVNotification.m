@@ -38,7 +38,7 @@ static NSMutableArray *openAlertList = nil;
  *  callbackId    The commmand callback id.
  *  dialogType    The type of alert view [alert | prompt].
  */
-- (void)showDialogWithMessage:(NSString*)message title:(NSString*)title buttons:(NSArray*)buttons defaultText:(NSString*)defaultText callbackId:(NSString*)callbackId dialogType:(NSString*)dialogType
+- (void)showDialogWithMessage:(NSString*)message title:(NSString*)title buttons:(NSArray*)buttons defaultText:(NSString*)defaultText callbackId:(NSString*)callbackId dialogType:(NSString*)dialogType styles:(NSArray*)styles
 {
     int count = (int)[buttons count];
 
@@ -48,7 +48,7 @@ static NSMutableArray *openAlertList = nil;
 
     for (int n = 0; n < count; n++) {
         [alertController addAction:[UIAlertAction actionWithTitle:[buttons objectAtIndex:n]
-                                                            style:UIAlertActionStyleDefault
+                                                            style:[styles objectAtIndex:n] // was UIAlertActionStyleDefault
                                                           handler:^(UIAlertAction * action)
         {
             CDVPluginResult* result;
@@ -94,7 +94,7 @@ static NSMutableArray *openAlertList = nil;
     NSString* title = [command argumentAtIndex:1];
     NSString* buttons = [command argumentAtIndex:2];
 
-    [self showDialogWithMessage:message title:title buttons:@[buttons] defaultText:nil callbackId:callbackId dialogType:DIALOG_TYPE_ALERT];
+    [self showDialogWithMessage:message title:title buttons:@[buttons] defaultText:nil callbackId:callbackId dialogType:DIALOG_TYPE_ALERT styles:@[0]];
 }
 
 - (void)confirm:(CDVInvokedUrlCommand*)command
@@ -103,8 +103,9 @@ static NSMutableArray *openAlertList = nil;
     NSString* message = [command argumentAtIndex:0];
     NSString* title = [command argumentAtIndex:1];
     NSArray* buttons = [command argumentAtIndex:2];
+    NSArray* styles = [command argumentAtIndex:3];
 
-    [self showDialogWithMessage:message title:title buttons:buttons defaultText:nil callbackId:callbackId dialogType:DIALOG_TYPE_ALERT];
+    [self showDialogWithMessage:message title:title buttons:buttons defaultText:nil callbackId:callbackId dialogType:DIALOG_TYPE_ALERT styles:styles];
 }
 
 - (void)prompt:(CDVInvokedUrlCommand*)command
@@ -114,8 +115,9 @@ static NSMutableArray *openAlertList = nil;
     NSString* title = [command argumentAtIndex:1];
     NSArray* buttons = [command argumentAtIndex:2];
     NSString* defaultText = [command argumentAtIndex:3];
+    NSArray* styles = [command argumentAtIndex:4];
 
-    [self showDialogWithMessage:message title:title buttons:buttons defaultText:defaultText callbackId:callbackId dialogType:DIALOG_TYPE_PROMPT];
+    [self showDialogWithMessage:message title:title buttons:buttons defaultText:defaultText callbackId:callbackId dialogType:DIALOG_TYPE_PROMPT styles:styles];
 }
 
 static void playBeep(int count) {

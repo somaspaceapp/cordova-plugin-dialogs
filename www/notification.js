@@ -51,10 +51,15 @@ module.exports = {
      * @param {String} title                Title of the alert dialog (default: Confirm)
      * @param {Array} buttonLabels          Array of the labels of the buttons (default: ['OK', 'Cancel'])
      */
-    confirm: function (message, resultCallback, title, buttonLabels) {
+    confirm: function (message, resultCallback, title, buttonLabels, buttonStyles) {
         var _message = typeof message === 'string' ? message : JSON.stringify(message);
         var _title = typeof title === 'string' ? title : 'Confirm';
         var _buttonLabels = buttonLabels || ['OK', 'Cancel'];
+        var _buttonStyles = buttonStyles || [0, 0];
+
+        if (_buttonLabels.length != _buttonStyles.length) {
+            _buttonStyles = _buttonLabels.map((x) => 0);
+        }
 
         // Strings are deprecated!
         if (typeof _buttonLabels === 'string') {
@@ -65,7 +70,7 @@ module.exports = {
 
         _buttonLabels = convertButtonLabels(_buttonLabels);
 
-        exec(resultCallback, null, 'Notification', 'confirm', [_message, _title, _buttonLabels]);
+        exec(resultCallback, null, 'Notification', 'confirm', [_message, _title, _buttonLabels, _buttonStyles]);
     },
 
     /**
@@ -84,6 +89,11 @@ module.exports = {
         var _message = typeof message === 'string' ? message : JSON.stringify(message);
         var _title = typeof title === 'string' ? title : 'Prompt';
         var _buttonLabels = buttonLabels || ['OK', 'Cancel'];
+        var _buttonStyles = buttonStyles || [0, 0];
+
+        if (_buttonLabels.length != _buttonStyles.length) {
+            _buttonStyles = _buttonLabels.map((x) => 0);
+        }
 
         // Strings are deprecated!
         if (typeof _buttonLabels === 'string') {
@@ -95,7 +105,7 @@ module.exports = {
         _buttonLabels = convertButtonLabels(_buttonLabels);
 
         var _defaultText = defaultText || '';
-        exec(resultCallback, null, 'Notification', 'prompt', [_message, _title, _buttonLabels, _defaultText]);
+        exec(resultCallback, null, 'Notification', 'prompt', [_message, _title, _buttonLabels, _defaultText, _buttonStyles]);
     },
 
     /**
